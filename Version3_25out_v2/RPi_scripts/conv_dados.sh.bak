@@ -1,0 +1,24 @@
+#!bin/bash
+
+#set -e
+
+while read -r -a myArray 
+do 
+  pkill gatttool
+  echo ${myArray[*]}
+#  for i in {1..19..2}
+#	do
+#	aux_var1=$(echo "ibase=16; ${myArray[i-1]}" | bc)
+#	aux_var2=$(echo "ibase=16; ${myArray[i]}" | bc)
+#	res_aux=$(expr $aux_var1 + $aux_var2 \* 256)
+#
+#	if [ "$res_aux" -gt 32768 ]
+#	then
+#		echo -n "$(expr $res_aux - 65536)	" #>> dados_convertidos.log
+#	else
+#		echo -n "$res_aux	" #>> dados_convertidos.log
+#	fi
+#	done
+# echo '' #>> dados_convertidos.log
+  exit
+done < <(stdbuf -o L gatttool -b C0:7A:34:31:2D:48 -t random --char-write-req -a 0x0012 -n 0100 --listen | stdbuf -o L sed -e 's\Notification handle = 0x0011 value: \\' -e '/Characteristic/d')
